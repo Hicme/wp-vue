@@ -1,0 +1,12 @@
+footer {
+    background-color: $footer-color;
+    color: #fff;
+    padding-top: 20px;
+    padding-bottom: 20px;
+
+    .row > div{
+        justify-content: center;
+        display: flex;
+        align-items: center;
+    }
+}

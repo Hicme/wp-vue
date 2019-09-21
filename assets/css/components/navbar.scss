@@ -1,0 +1,87 @@
+.nav-item {
+  &.has-submenu {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;    
+    position: relative;
+    z-index: 1;
+    
+    @media (min-width: 992px) {
+      &:hover {
+        & > .sub-menu {
+          display: block!important;
+          animation-name: fadeInDown;
+          z-index: 2;
+          
+          &--second {
+            animation-name: fadeInLeft;
+          }
+        }
+      }
+    }
+  }
+  
+  .sub {
+    &-menu {
+      flex: 0 0 100%;
+      padding-left: 15px;
+      list-style: none;
+      max-height: unset;
+      animation-duration: 1s;
+      animation-fill-mode: both;
+      
+      @media (min-width: 992px) {
+        z-index: -1;
+        
+        .nav-item {
+          padding: 0 10px 0 5px;
+        }
+        
+        &--first {
+          position: absolute;
+          left: 0;
+          padding-left: 0!important;
+          top: 100%;
+          z-index: 2;
+          background-color: #eee;
+          min-width: 250px;
+        }
+        
+        &--second {
+          position: absolute;
+          padding-left: 0!important;
+          left: 100%;
+          background: #eee;
+          min-width: 200px;
+          animation-name: fadeOutLeft;
+        }
+      }
+    }
+    
+    &-icon {
+      cursor: pointer;
+      text-align: center;
+      position: relative;
+      width: 13px;
+      height: 13px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all .3s ease-out;
+      
+      @media (min-width: 992px) {
+        pointer-events: none;
+      }
+      
+      svg {
+        width: 100%;
+      }
+      
+      &.expanded {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
