@@ -29,7 +29,7 @@ export default function({ store, app }) {
       (mutation.payload.field === 'payment_method' ||
         mutation.payload.field === 'shipping_method')
     ) {
-      app.store.dispatch('cart/updateTotals')
+      app.store.dispatch('cart/fetchFields', true)
     }
   })
 

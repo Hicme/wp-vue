@@ -7,9 +7,11 @@
       class="form-control"
       :class="{ 'is-invalid': field.validation }"
     />
-    <div v-if="field.validation" class="invalid-feedback">
-      {{ field.validation }}
-    </div>
+    <div
+      v-if="field.validation"
+      class="invalid-feedback"
+      v-html="field.validation"
+    />
   </div>
 </template>
 

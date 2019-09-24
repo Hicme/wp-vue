@@ -9,8 +9,12 @@
       <p class="font-italic mb-4">
         Shipping methods based on values you have entered.
       </p>
-      <div v-if="methods" class="shippingMethods">
-        <div v-for="(method, index) in methods" :key="index" class="form-check">
+      <div v-if="methods.methods" class="shippingMethods">
+        <div
+          v-for="(method, index) in methods.methods"
+          :key="index"
+          class="form-check"
+        >
           <input
             :id="'shippingMethod_' + index"
             v-model="selected"

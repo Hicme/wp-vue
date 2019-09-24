@@ -48,10 +48,20 @@ export const actions = {
       commit('cart', response.data)
     }
   },
-  async fetchFields({ commit }) {
-    const { status, response } = await this.$wp.ajax({
+  async fetchFields({ commit, getters }, update = false) {
+    let posted = {
       action: 'processCheckoutFields'
-    })
+    }
+
+    if (update) {
+      posted = {
+        ...posted,
+        posted_data: true,
+        ...getters.user
+      }
+    }
+
+    const { status, response } = await this.$wp.ajax(posted)
 
     if (status) {
       commit('cartFields', response.data.fields)
@@ -82,16 +92,6 @@ export const actions = {
         section,
         value: Object.keys(response.data).length > 0 ? response.data : false
       })
-    }
-  },
-  async updateTotals({ commit, getters, dispatch }) {
-    const { status } = await this.$wp.ajax({
-      action: 'updateTotals',
-      ...getters.user
-    })
-
-    if (status) {
-      dispatch('fetchCart')
     }
   },
   async removeFromCart({ commit }, itemKey) {

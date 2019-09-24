@@ -6,9 +6,9 @@
       Payment
     </div>
     <div class="p-4">
-      <div v-if="methods" class="payment_methods">
+      <div v-if="methods.methods" class="payment_methods">
         <div
-          v-for="(method, index) in methods"
+          v-for="(method, index) in methods.methods"
           :key="method.id"
           class="form-check"
         >

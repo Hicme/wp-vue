@@ -2,7 +2,7 @@
   <div class="col-sm-6 mb-2 mt-2" :class="field.class">
     <label :for="'field_' + field.name">{{ field.label }}</label>
     <select
-      v-if="field.values"
+      v-if="field.values && field.values.length"
       :id="'field_' + field.name"
       v-model.lazy="model"
       class="form-control"
@@ -24,9 +24,11 @@
       type="text"
       class="form-control"
     />
-    <div v-if="field.validation" class="invalid-feedback">
-      {{ field.validation }}
-    </div>
+    <div
+      v-if="field.validation"
+      class="invalid-feedback"
+      v-html="field.validation"
+    />
   </div>
 </template>
 
