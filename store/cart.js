@@ -2,6 +2,7 @@ export const state = () => ({
   cart: false,
   user: false,
   fields: false,
+  validation: false,
   shipping: false,
   payment: false
 })
@@ -9,6 +10,7 @@ export const state = () => ({
 export const getters = {
   cart: state => state.cart,
   fields: state => state.fields,
+  validation: state => state.validation,
   user: state => state.user,
   shipping: state => state.shipping,
   payment: state => state.payment
@@ -17,6 +19,9 @@ export const getters = {
 export const mutations = {
   cart(state, data) {
     state.cart = data
+  },
+  validation(state, data) {
+    state.validation = data
   },
   cartFields(state, data) {
     state.fields = data
@@ -56,7 +61,7 @@ export const actions = {
     if (update) {
       posted = {
         ...posted,
-        posted_data: true,
+        user_datas: true,
         ...getters.user
       }
     }
@@ -64,18 +69,13 @@ export const actions = {
     const { status, response } = await this.$wp.ajax(posted)
 
     if (status) {
-      commit('cartFields', response.data.fields)
+      commit('cartFields', response.data.checkout_fields)
+      commit('shipping', response.data.shipping_methods)
+      commit('payment', response.data.payment_methods)
+      commit('validation', response.data.validation)
 
-      if (response.data.user) {
-        commit('userFields', response.data.user)
-      }
-
-      if (response.data.shipping) {
-        commit('shipping', response.data.shipping)
-      }
-
-      if (response.data.payment) {
-        commit('payment', response.data.payment)
+      if (response.data.user_datas) {
+        commit('userFields', response.data.user_datas)
       }
     }
   },
@@ -95,20 +95,30 @@ export const actions = {
     }
   },
   async removeFromCart({ commit }, itemKey) {
-    const { status } = await this.$wp.ajax({
+    const { status, response } = await this.$wp.ajax({
       action: 'deleteCartProduct',
       item_key: itemKey
     })
+
+    if (status) {
+      commit('cart', response.data.data)
+    }
+
     return status
   },
   async addToCart({ commit }, { id, quantity }) {
-    const { status } = await this.$wp.ajax({
-      action: 'AddCartProduct',
+    const { status, response } = await this.$wp.ajax({
+      action: 'addCartProduct',
       id,
       quantity
     })
 
-    return status
+    if (status) {
+      commit('cart', response.data.data)
+      return response.data
+    }
+
+    return false
   },
   async addCoupon({ commit }, coupon) {
     const { status, response } = await this.$wp.ajax({
@@ -116,7 +126,12 @@ export const actions = {
       coupon
     })
 
-    return status ? response : false
+    if (status) {
+      commit('cart', response.data.data)
+      return response.data
+    }
+
+    return false
   },
   async removeCoupon({ commit }, coupon) {
     const { status, response } = await this.$wp.ajax({
@@ -124,7 +139,12 @@ export const actions = {
       coupon
     })
 
-    return status ? response : false
+    if (status) {
+      commit('cart', response.data.data)
+      return response.data
+    }
+
+    return false
   },
   async processCheckout({ commit }) {
     const { status, response } = await this.$wp.ajax({

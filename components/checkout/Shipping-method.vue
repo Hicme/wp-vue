@@ -9,12 +9,12 @@
       <p class="font-italic mb-4">
         Shipping methods based on values you have entered.
       </p>
-      <div v-if="methods.methods" class="shippingMethods">
-        <div
-          v-for="(method, index) in methods.methods"
-          :key="index"
-          class="form-check"
-        >
+      <div
+        v-if="methods"
+        class="shippingMethods"
+        :class="{ 'is-invalid': validation }"
+      >
+        <div v-for="(method, index) in methods" :key="index" class="form-check">
           <input
             :id="'shippingMethod_' + index"
             v-model="selected"
@@ -31,9 +31,7 @@
         Sorry, no shippng methods for you.
       </div>
 
-      <div v-if="!false" class="invalid-feedback">
-        Please, select shipping method.
-      </div>
+      <div v-if="validation" class="invalid-feedback" v-html="validation" />
     </div>
   </div>
 </template>
@@ -41,6 +39,9 @@
 <script>
 export default {
   computed: {
+    validation() {
+      return this.$store.getters['cart/validation'].shipping_method
+    },
     selected: {
       get() {
         return this.$store.getters['cart/user'].shipping_method

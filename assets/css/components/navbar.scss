@@ -1,3 +1,10 @@
+.dropdown {
+  &:hover .dropdown-menu {
+    display: block;
+    margin-top: -3px;
+  }
+}
+
 .nav-item {
   &.has-submenu {
     display: flex;

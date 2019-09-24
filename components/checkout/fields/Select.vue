@@ -5,7 +5,7 @@
       :id="'field_' + field.name"
       v-model.lazy="model"
       class="form-control"
-      :class="{ 'is-invalid': field.validation }"
+      :class="{ 'is-invalid': validation }"
     >
       <option disabled value="">Select {{ field.label }}</option>
       <option
@@ -16,11 +16,7 @@
         {{ values }}
       </option>
     </select>
-    <div
-      v-if="field.validation"
-      class="invalid-feedback"
-      v-html="field.validation"
-    />
+    <div v-if="validation" class="invalid-feedback" v-html="validation" />
   </div>
 </template>
 
@@ -33,6 +29,17 @@ export default {
     }
   },
   computed: {
+    validation() {
+      const errors = this.$store.getters['cart/validation']
+
+      if (
+        errors[this.field.section] &&
+        errors[this.field.section][this.field.name]
+      ) {
+        return errors[this.field.section][this.field.name]
+      }
+      return false
+    },
     model: {
       get() {
         return this.$store.getters['cart/user'][this.field.name]

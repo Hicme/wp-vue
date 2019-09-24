@@ -6,9 +6,13 @@
       Payment
     </div>
     <div class="p-4">
-      <div v-if="methods.methods" class="payment_methods">
+      <div
+        v-if="methods"
+        class="payment_methods"
+        :class="{ 'is-invalid': validation }"
+      >
         <div
-          v-for="(method, index) in methods.methods"
+          v-for="(method, index) in methods"
           :key="method.id"
           class="form-check"
         >
@@ -28,9 +32,7 @@
       <div v-else class="no_payment_methods alert alert-info">
         Sorry, no payment methods was found.
       </div>
-      <div v-if="!false" class="invalid-feedback">
-        Please, select payment method.
-      </div>
+      <div v-if="validation" class="invalid-feedback" v-html="validation" />
     </div>
   </div>
 </template>
@@ -38,6 +40,14 @@
 <script>
 export default {
   computed: {
+    validation() {
+      const errors = this.$store.getters['cart/validation']
+
+      if (errors.payment_method) {
+        return errors.payment_method
+      }
+      return false
+    },
     model: {
       get() {
         return this.$store.getters['cart/user'].payment_method

@@ -1,17 +1,4 @@
 export default function({ store, app }) {
-  store.subscribeAction({
-    after: (action, state) => {
-      if (
-        action.type === 'cart/addToCart' ||
-        action.type === 'cart/removeFromCart' ||
-        action.type === 'cart/addCoupon' ||
-        action.type === 'cart/removeCoupon'
-      ) {
-        app.store.dispatch('cart/fetchCart')
-      }
-    }
-  })
-
   store.subscribe((mutation, state) => {
     if (
       mutation.type === 'cart/userField' &&

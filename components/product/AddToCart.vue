@@ -25,12 +25,12 @@ export default {
   },
   methods: {
     async tryAddToCart() {
-      const { data, message } = await this.$store.dispatch('cart/addToCart', {
+      const { message } = await this.$store.dispatch('cart/addToCart', {
         id: this.product.id,
         quantity: 1
       })
 
-      if (data) {
+      if (message) {
         this.addedToCartText = message
 
         this.showAdded()
