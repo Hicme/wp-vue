@@ -28,6 +28,7 @@
     "nuxt-purgecss": "^0.2.1",
     "p-map": "^2.1.0",
     "vue-burger-button": "^0.1.2",
+    "vue-lodash": "^2.0.2",
     "vue-truncate-filter": "^1.1.7",
     "vuelidate": "^0.7.4"
   },

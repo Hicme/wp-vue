@@ -22,6 +22,7 @@ export default {
   plugins: [
     '@/plugins/vuelidate',
     '@/plugins/localStorageManager',
+    '@/plugins/lodash',
     { src: '@/plugins/user', ssr: false },
     { src: '@/plugins/cart', ssr: false }
   ],
