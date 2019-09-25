@@ -16,8 +16,7 @@
           placeholder="Apply coupon"
           aria-describedby="button-addon3"
           class="form-control border-0"
-          :class="{ 'is-invalid': $v.coupunCode.$error || cError }"
-          @change="$v.coupunCode.$touch()"
+          :class="{ 'is-invalid': empty || error }"
           @keydown="removeErrors"
         />
         <div class="input-group-append border-0">
@@ -32,51 +31,53 @@
           </button>
         </div>
       </div>
-      <div v-if="$v.coupunCode.$error" class="alert alert-danger">
+      <div v-if="empty" class="alert alert-danger">
         Coupon code can't be empty
       </div>
-      <div v-if="cError && !$v.coupunCode.$error" class="alert alert-danger">
-        {{ badCoupon.message }}
+      <div v-if="error" class="alert alert-danger">
+        {{ errorMessage }}
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { required } from 'vuelidate/lib/validators'
-
 export default {
   data() {
     return {
       coupunCode: '',
-      badCoupon: '',
-      cError: false
+      empty: false,
+      error: false,
+      errorMessage: ''
     }
   },
   methods: {
     async applyCoupon() {
-      this.$v.coupunCode.$touch()
-      this.badCoupon = ''
-      this.cError = false
-      if (!this.$v.$invalid) {
-        const couponCheck = await this.$store.dispatch(
+      this.error = false
+      this.errorMessage = ''
+
+      if (this.coupunCode !== '') {
+        this.empty = false
+
+        const response = await this.$store.dispatch(
           'cart/addCoupon',
           this.coupunCode
         )
-        if (couponCheck.status === 405) {
-          this.badCoupon = couponCheck.response.data
-          this.cError = true
+
+        if (!response.status) {
+          this.error = true
+          this.errorMessage = response.data.message
+        } else {
+          this.removeErrors()
         }
+      } else {
+        this.empty = true
       }
     },
     removeErrors() {
-      this.badCoupon = ''
-      this.cError = false
-    }
-  },
-  validations: {
-    coupunCode: {
-      required
+      this.empty = false
+      this.error = false
+      this.errorMessage = ''
     }
   }
 }

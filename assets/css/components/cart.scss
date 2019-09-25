@@ -56,4 +56,7 @@
   }
 }
 
-
+.payment_methods.is-invalid~.invalid-feedback,
+.shippingMethods.is-invalid~.invalid-feedback {
+  display: block;
+}

@@ -14,6 +14,9 @@
           <shipping-method />
           <payment-method />
           <order-totals />
+          <div v-if="errors">
+            {{ errors }}
+          </div>
           <div class="p-4">
             <button
               type="submit"
@@ -44,10 +47,29 @@ export default {
     PaymentMethod,
     OrderTotals
   },
+  computed: {
+    errors() {
+      return this.$store.getters['cart/orderMessages']
+    }
+  },
+  beforeDestroy() {
+    this.$store.commit('cartFields', false)
+    this.$store.commit('shipping', false)
+    this.$store.commit('payment', false)
+    this.$store.commit('validation', false)
+    this.$store.commit('userFields', false)
+    this.$store.commit('orderMessages', false)
+  },
   methods: {
-    async checkoutFrom() {
-      await this.$store.dispatch('cart/processCheckout')
-      alert('Form submitted')
+    async checkoutFrom(e) {
+      e.preventDefault()
+      const result = await this.$store.dispatch('cart/processOrder')
+
+      if (result) {
+        this.$router.push(
+          `/checkout/order-received/${result.order_id}?key=${result.order_key}`
+        )
+      }
     }
   }
 }

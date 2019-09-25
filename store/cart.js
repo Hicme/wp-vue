@@ -4,7 +4,8 @@ export const state = () => ({
   fields: false,
   validation: false,
   shipping: false,
-  payment: false
+  payment: false,
+  orderMessages: false
 })
 
 export const getters = {
@@ -13,7 +14,8 @@ export const getters = {
   validation: state => state.validation,
   user: state => state.user,
   shipping: state => state.shipping,
-  payment: state => state.payment
+  payment: state => state.payment,
+  orderMessages: state => state.orderMessages
 }
 
 export const mutations = {
@@ -40,6 +42,9 @@ export const mutations = {
   },
   payment(state, data) {
     state.payment = data
+  },
+  orderMessages(state, data) {
+    state.orderMessages = data
   }
 }
 
@@ -76,6 +81,10 @@ export const actions = {
 
       if (response.data.user_datas) {
         commit('userFields', response.data.user_datas)
+      }
+
+      if (response.data.cart_content) {
+        commit('cart', response.data.cart_content)
       }
     }
   },
@@ -128,10 +137,9 @@ export const actions = {
 
     if (status) {
       commit('cart', response.data.data)
-      return response.data
     }
 
-    return false
+    return response
   },
   async removeCoupon({ commit }, coupon) {
     const { status, response } = await this.$wp.ajax({
@@ -146,24 +154,24 @@ export const actions = {
 
     return false
   },
-  async processCheckout({ commit }) {
+  async processOrder({ commit, getters }) {
     const { status, response } = await this.$wp.ajax({
-      action: 'processCheckout',
-      billing_email: this.getters['cart/getUser'].billing_email,
-      billing_first_name: this.getters['cart/getUser'].billing_first_name,
-      billing_last_name: this.getters['cart/getUser'].billing_last_name,
-      billing_phone: this.getters['cart/getUser'].billing_phone,
-      billing_country: this.getters['cart/getUser'].billing_country,
-      billing_state: this.getters['cart/getUser'].billing_state,
-      billing_postcode: this.getters['cart/getUser'].billing_postcode,
-      billing_address_1: this.getters['cart/getUser'].billing_address_1,
-      order_comments: this.getters['cart/getComment'],
-      payment_method: this.getters['cart/getUser'].payment_method,
-      shipping_method: this.getters['cart/getUser'].shipping_method
+      action: 'processOrder',
+      user_datas: true,
+      ...getters.user
     })
 
-    if (status) {
-      commit('setOrder', response.data)
+    if (!status) {
+      if (response.data.validation) {
+        commit('validation', response.data.validation)
+      }
+
+      if (response.data.message) {
+        commit('orderMessages', response.message)
+      }
+    } else {
+      commit('cart', false)
+
       return response.data
     }
 
