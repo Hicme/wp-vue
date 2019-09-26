@@ -11,21 +11,45 @@
 
 <script>
 export default {
-  async asyncData({ app, store, error, payload }) {
+  async asyncData({ app, store, route, error, payload }) {
     if (payload) {
       return payload
     }
 
-    try {
-      const page = await store.dispatch(
-        'page/fetchById',
-        app.$wp.settings('front_page')
-      )
-      store.commit('app/sidebar', page.show_sidebar)
+    if (route.query.preview) {
+      try {
+        const page = await store.dispatch(
+          'page/fetchPreview',
+          route.query.page_id
+        )
 
-      return page
-    } catch (e) {
-      error({ statusCode: 404, message: 'Post not found' })
+        if (!page) {
+          error({ statusCode: 404, message: 'Post not found' })
+        }
+
+        store.commit('app/sidebar', page.show_sidebar)
+
+        return page
+      } catch (e) {
+        error({ statusCode: 404, message: 'Post not found' })
+      }
+    } else {
+      try {
+        const page = await store.dispatch(
+          'page/fetchById',
+          app.$wp.settings('front_page')
+        )
+
+        if (!page) {
+          error({ statusCode: 404, message: 'Post not found' })
+        }
+
+        store.commit('app/sidebar', page.show_sidebar)
+
+        return page
+      } catch (e) {
+        error({ statusCode: 404, message: 'Post not found' })
+      }
     }
   },
   head() {

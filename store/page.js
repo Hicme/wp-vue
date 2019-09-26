@@ -22,5 +22,17 @@ export const actions = {
     }
 
     return false
+  },
+  async fetchPreview({ commit }, id) {
+    const { status, response } = await this.$wp.ajax({
+      action: 'loadPreview',
+      id
+    })
+
+    if (status) {
+      return response.data
+    }
+
+    return false
   }
 }
