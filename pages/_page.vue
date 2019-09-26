@@ -19,18 +19,41 @@ export default {
   components: {
     Breadcrumbs
   },
-  async asyncData({ app, store, params, error, payload }) {
+  async asyncData({ app, store, route, params, error, payload }) {
     if (payload) {
       return payload
     }
 
-    try {
-      const page = await store.dispatch('page/fetchBySlug', params.page)
-      store.commit('app/sidebar', page.show_sidebar)
+    if (route.query.preview) {
+      try {
+        const page = await store.dispatch(
+          'page/fetchPreview',
+          route.query.page_id
+        )
 
-      return page
-    } catch (e) {
-      error({ statusCode: 404, message: 'Post not found' })
+        if (!page) {
+          error({ statusCode: 404, message: 'Post not found' })
+        }
+
+        store.commit('app/sidebar', page.show_sidebar)
+
+        return page
+      } catch (e) {
+        error({ statusCode: 404, message: 'Post not found' })
+      }
+    } else {
+      try {
+        const page = await store.dispatch('page/fetchBySlug', params.page)
+        store.commit('app/sidebar', page.show_sidebar)
+
+        if (!page) {
+          error({ statusCode: 404, message: 'Post not found' })
+        }
+
+        return page
+      } catch (e) {
+        error({ statusCode: 404, message: 'Post not found' })
+      }
     }
   },
   head() {
