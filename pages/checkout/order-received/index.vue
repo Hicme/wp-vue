@@ -32,9 +32,13 @@ export default {
   async asyncData({ route, params, store, error }) {
     try {
       const order = await store.dispatch('cart/getOrder', {
-        orderId: params.id,
+        orderId: route.query.order,
         orderKey: route.query.key
       })
+
+      if (!order) {
+        error({ statusCode: 404, message: 'Your order not found' })
+      }
 
       return order
     } catch (e) {

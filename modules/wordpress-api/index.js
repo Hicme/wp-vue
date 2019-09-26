@@ -80,11 +80,11 @@ export default async function wordpressApi(moduleOptions) {
     ) {
       const blogCatebories = await loadCategories(
         options.url + options.categories,
-        'category',
+        'blog/category',
         options.url + options.posts,
         options.posts_per_page
       )
-      routes.push({ route: `/category` })
+      routes.push({ route: `/blog/category` })
       routes.push(...blogCatebories)
       console.info('Added categories routes.')
     }

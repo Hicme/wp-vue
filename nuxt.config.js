@@ -22,7 +22,7 @@ export default {
   plugins: [
     '@/plugins/vuelidate',
     '@/plugins/lodash',
-    { src: '@/plugins/user', ssr: false },
+    { src: '@/plugins/init', ssr: false },
     { src: '@/plugins/cart', ssr: false }
   ],
   modules: [

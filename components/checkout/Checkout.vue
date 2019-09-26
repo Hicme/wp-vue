@@ -67,7 +67,7 @@ export default {
 
       if (result) {
         this.$router.push(
-          `/checkout/order-received/${result.order_id}?key=${result.order_key}`
+          `/checkout/order-received/?order=${result.order_id}&key=${result.order_key}`
         )
       }
     }
