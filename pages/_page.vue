@@ -24,36 +24,17 @@ export default {
       return payload
     }
 
-    if (route.query.preview) {
-      try {
-        const page = await store.dispatch(
-          'page/fetchPreview',
-          route.query.page_id
-        )
+    try {
+      const page = await store.dispatch('page/fetchBySlug', params.page)
+      store.commit('app/sidebar', page.show_sidebar)
 
-        if (!page) {
-          error({ statusCode: 404, message: 'Post not found' })
-        }
-
-        store.commit('app/sidebar', page.show_sidebar)
-
-        return page
-      } catch (e) {
+      if (!page) {
         error({ statusCode: 404, message: 'Post not found' })
       }
-    } else {
-      try {
-        const page = await store.dispatch('page/fetchBySlug', params.page)
-        store.commit('app/sidebar', page.show_sidebar)
 
-        if (!page) {
-          error({ statusCode: 404, message: 'Post not found' })
-        }
-
-        return page
-      } catch (e) {
-        error({ statusCode: 404, message: 'Post not found' })
-      }
+      return page
+    } catch (e) {
+      error({ statusCode: 404, message: 'Post not found' })
     }
   },
   head() {

@@ -36,7 +36,7 @@ export class Wp {
     } catch (err) {
       return {
         status: false,
-        response: err.response.data
+        response: err.response ? err.response.data : false
       }
     }
   }

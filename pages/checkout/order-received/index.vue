@@ -1,11 +1,11 @@
 <template>
   <div>
     <h1>Order received</h1>
-    <p>Order Id: {{ orderId }}</p>
-    <p>Date: {{ date }}</p>
-    <p>Total: <span v-html="total"></span></p>
-    <p>Payment method: {{ paymentMethod }}</p>
-    <p>Shipping method: {{ shippingMethod }}</p>
+    <p>Order Id: {{ order.orderId }}</p>
+    <p>Date: {{ order.date }}</p>
+    <p>Total: <span v-html="order.total"></span></p>
+    <p>Payment method: {{ order.paymentMethod }}</p>
+    <p>Shipping method: {{ order.shippingMethod }}</p>
     <table>
       <thead>
         <tr>
@@ -15,7 +15,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="product in products" :key="product.productId">
+        <tr v-for="product in order.products" :key="product.productId">
           <td>
             <a :href="product.productlink">{{ product.title }}</a>
           </td>
@@ -29,19 +29,21 @@
 
 <script>
 export default {
-  async asyncData({ route, params, store, error }) {
-    try {
-      const order = await store.dispatch('cart/getOrder', {
-        orderId: route.query.order,
-        orderKey: route.query.key
-      })
+  computed: {
+    order() {
+      return this.$store.getters['order/order']
+    }
+  },
+  asyncData({ error }) {
+    error({ statusCode: 404, message: 'Your order not found' })
+  },
+  async fetch({ route, store, error }) {
+    const order = await store.dispatch('order/fetch', {
+      orderId: route.query.order,
+      orderKey: route.query.key
+    })
 
-      if (!order) {
-        error({ statusCode: 404, message: 'Your order not found' })
-      }
-
-      return order
-    } catch (e) {
+    if (!order) {
       error({ statusCode: 404, message: 'Your order not found' })
     }
   }
