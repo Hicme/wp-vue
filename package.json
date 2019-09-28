@@ -12,10 +12,7 @@
     "build": "nuxt build",
     "start": "nuxt start",
     "generate": "nuxt generate --all",
-    "generate:pages": "nuxt generate --pages",
-    "generate:posts": "nuxt generate --posts",
-    "generate:products": "nuxt generate --products",
-    "generate:categories": "nuxt generate --categories"
+    "srd": "node render.js"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",
@@ -26,6 +23,7 @@
     "nuxt": "^2.0.0",
     "nuxt-device-detect": "^1.1.5",
     "nuxt-purgecss": "^0.2.1",
+    "optimist": "^0.6.1",
     "p-map": "^2.1.0",
     "vue-burger-button": "^0.1.2",
     "vue-lodash": "^2.0.2",

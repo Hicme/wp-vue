@@ -1,4 +1,4 @@
-export default {
+module.exports = {
   mode: 'universal',
   wpUrl: process.env.npm_package_url || '',
   head: {

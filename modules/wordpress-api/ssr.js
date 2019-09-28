@@ -1,5 +1,5 @@
-import axios from 'axios'
-import pMap from 'p-map'
+const axios = require('axios')
+const pMap = require('p-map')
 
 export const loadObjects = async function(
   url,

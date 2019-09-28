@@ -1,6 +1,7 @@
-import { resolve } from 'path'
-import { loadObjects, loadCategories } from './ssr.js'
-import loadSettings from './loadSettings.js'
+const { resolve } = require('path')
+const { loadObjects, loadCategories } = require('./ssr.js')
+const loadSettings = require('./loadSettings.js')
+const params = require('optimist').argv
 
 const defaults = {
   posts: '/wp-json/wp/v2/posts',
@@ -26,13 +27,16 @@ export default async function wordpressApi(moduleOptions) {
   })
 
   this.nuxt.hook('generate:extendRoutes', async routes => {
-    // if (
-    //   process.argv.includes('--posts') ||
-    //   process.argv.includes('--products') ||
-    //   process.argv.includes('--categories')
-    // ) {
-    //   console.info('Cleaned default routes.')
-    //   routes = []
+    // if (params.type === 'page') {
+    //   routes.push(`/${params.link}`)
+    // }
+
+    // if (params.type === 'post') {
+    //   routes.push(`/blog/${params.link}`)
+    // }
+
+    // if (params.type === 'product') {
+    //   routes.push(`/shop/${params.link}`)
     // }
 
     if (process.argv.includes('--posts') || process.argv.includes('--all')) {

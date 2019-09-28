@@ -1,16 +1,16 @@
-export default function({ store, route }) {
-  store.dispatch('user/fetch')
-  store.dispatch('menu/fetch')
-  store.dispatch('sidebar/fetch')
-  store.dispatch('footer/fetch')
+export default function(ctx) {
+  ctx.store.dispatch('user/fetch')
+  ctx.store.dispatch('menu/fetch')
+  ctx.store.dispatch('sidebar/fetch')
+  ctx.store.dispatch('footer/fetch')
 
-  if (route.query.preview) {
-    if (route.query.p) {
-      store.dispatch('page/fetchPreview', route.query.p)
+  if (ctx.route.query.preview) {
+    if (ctx.route.query.p) {
+      ctx.store.dispatch('page/fetchPreview', ctx.route.query.p)
     }
 
-    if (route.query.page_id) {
-      store.dispatch('page/fetchPreview', route.query.page_id)
+    if (ctx.route.query.page_id) {
+      ctx.store.dispatch('page/fetchPreview', ctx.route.query.page_id)
     }
   }
 }

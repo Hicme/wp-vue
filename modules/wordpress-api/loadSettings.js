@@ -1,15 +1,16 @@
-import axios from 'axios'
+const axios = require('axios')
 
-export default async (siteUrl = '') => {
+const loadSettings = async (siteUrl = '') => {
   if (!siteUrl) {
-    const err = 'No site url defined!'
-    throw err
+    throw new Error('No site url defined!')
   }
 
   try {
     const settings = await axios.get(siteUrl)
     return settings.data
   } catch (err) {
-    throw err
+    throw new Error(`Error while loading WP settings. URL: ${siteUrl}`)
   }
 }
+
+module.exports = loadSettings
