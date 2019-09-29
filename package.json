@@ -1,6 +1,6 @@
 {
   "name": "vue-clinic",
-  "url": "https://nuxt.preview.dev3.prosvit.design",
+  "url": "http://cleanwp.loc",
   "version": "1.0.0",
   "description": "My good Nuxt.js project",
   "author": "Oleg Podmarkov",
@@ -11,8 +11,8 @@
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
-    "generate": "nuxt generate --all",
-    "srd": "node render.js"
+    "generate": "nuxt generate --type=all",
+    "generate:single": "node render.js"
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.5.4",

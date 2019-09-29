@@ -27,19 +27,7 @@ export default async function wordpressApi(moduleOptions) {
   })
 
   this.nuxt.hook('generate:extendRoutes', async routes => {
-    // if (params.type === 'page') {
-    //   routes.push(`/${params.link}`)
-    // }
-
-    // if (params.type === 'post') {
-    //   routes.push(`/blog/${params.link}`)
-    // }
-
-    // if (params.type === 'product') {
-    //   routes.push(`/shop/${params.link}`)
-    // }
-
-    if (process.argv.includes('--posts') || process.argv.includes('--all')) {
+    if (process.argv.includes('--posts') || params.type === 'all') {
       console.info('Start load post routes.')
       const posts = await loadObjects(
         options.url + options.posts,
@@ -55,7 +43,7 @@ export default async function wordpressApi(moduleOptions) {
       console.info('Loaded post routes.')
     }
 
-    if (process.argv.includes('--pages') || process.argv.includes('--all')) {
+    if (params.type === 'all') {
       const pages = await loadObjects(
         options.url + options.pages,
         {},
@@ -66,7 +54,7 @@ export default async function wordpressApi(moduleOptions) {
       console.info('Added pages routes.')
     }
 
-    if (process.argv.includes('--products') || process.argv.includes('--all')) {
+    if (process.argv.includes('--products') || params.type === 'all') {
       const products = await loadObjects(
         options.url + options.products,
         {},
@@ -78,10 +66,7 @@ export default async function wordpressApi(moduleOptions) {
       console.info('Added products routes.')
     }
 
-    if (
-      process.argv.includes('--categories') ||
-      process.argv.includes('--all')
-    ) {
+    if (params.type === 'post' || params.type === 'all') {
       const blogCatebories = await loadCategories(
         options.url + options.categories,
         'blog/category',
