@@ -20,9 +20,9 @@ export default {
     }
   },
   created() {
-    store.dispatch('order/fetch', {
-      orderId: route.query.order,
-      orderKey: route.query.key
+    this.$store.dispatch('order/fetch', {
+      orderId: this.$route.query.order,
+      orderKey: this.$route.query.key
     })
   }
 }
