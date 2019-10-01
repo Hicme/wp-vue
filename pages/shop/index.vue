@@ -44,7 +44,11 @@ export default {
       }
     }
   },
-  async asyncData({ app, params, error, store }) {
+  async asyncData({ app, params, error, store, payload }) {
+    if (payload) {
+      return { product: payload }
+    }
+
     try {
       store.commit('app/sidebar', app.$wp.settings('show_sidebar_on_archive'))
       return await store.dispatch('product/fetchPaged', 1)

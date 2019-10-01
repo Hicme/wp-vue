@@ -6,7 +6,8 @@ export const loadObjects = async function(
   urlParams = {},
   baseRoute,
   paginate = false,
-  perPage = 10
+  perPage = 10,
+  parsePosts = true
 ) {
   const object = await new Promise(async (resolve, reject) => {
     let object
@@ -53,7 +54,7 @@ export const loadObjects = async function(
       })
     }
 
-    if (!totalItems || totalPages < 1) {
+    if (!totalItems || totalPages < 1 && parsePosts) {
       object.data.forEach(obj => {
         routes.push({
           route: `/${baseRoute}${obj.slug}`,
@@ -82,7 +83,6 @@ export const loadObjects = async function(
           }
         })
         object.data.push(...ensureArrayData(url, data))
-
         if (paginate) {
           routes.push({
             route: `/${baseRoute}page/${params.page}`,
@@ -99,12 +99,14 @@ export const loadObjects = async function(
       }
     })
 
-    object.data.forEach(cont => {
-      routes.push({
-        route: `/${baseRoute}${cont.slug}`,
-        payload: cont
+    if (parsePosts) {
+      object.data.forEach(cont => {
+        routes.push({
+          route: `/${baseRoute}${cont.slug}`,
+          payload: cont
+        })
       })
-    })
+    }
 
     resolve(routes)
   })

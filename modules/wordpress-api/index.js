@@ -27,7 +27,45 @@ export default async function wordpressApi(moduleOptions) {
   })
 
   this.nuxt.hook('generate:extendRoutes', async routes => {
-    if (process.argv.includes('--posts') || params.type === 'all') {
+    if (params.type === 'post') {
+      console.info('Start load posts archive routes.')
+
+      const posts = await loadObjects(
+        options.url + options.posts,
+        {},
+        'blog/',
+        true,
+        options.posts_per_page,
+        false
+      )
+
+      routes.push(...posts)
+      routes.push({
+        route: `/blog/page`
+      })
+
+      console.info('Loaded posts archive routes.')
+    }
+
+    if (params.type === 'product') {
+      console.info('Start load products archive routes.')
+
+      const posts = await loadObjects(
+        options.url + options.products,
+        {},
+        'shop/',
+        true,
+        options.posts_per_page,
+        false
+      )
+
+      routes.push(...posts)
+      routes.push({ route: `/shop/page` })
+
+      console.info('Loaded products archive routes.')
+    }
+
+    if (params.type === 'all') {
       console.info('Start load post routes.')
       const posts = await loadObjects(
         options.url + options.posts,
@@ -38,12 +76,9 @@ export default async function wordpressApi(moduleOptions) {
       )
 
       routes.push(...posts)
-      routes.push({ route: `/blog` })
       routes.push({ route: `/blog/page` })
-      console.info('Loaded post routes.')
-    }
+      console.info('Loaded posts routes.')
 
-    if (params.type === 'all') {
       const pages = await loadObjects(
         options.url + options.pages,
         {},
@@ -52,17 +87,15 @@ export default async function wordpressApi(moduleOptions) {
       )
       routes.push(...pages)
       console.info('Added pages routes.')
-    }
 
-    if (process.argv.includes('--products') || params.type === 'all') {
       const products = await loadObjects(
         options.url + options.products,
         {},
         'shop/',
         true
       )
-      routes.push({ route: `/shop` })
       routes.push(...products)
+      routes.push({ route: `/shop/page` })
       console.info('Added products routes.')
     }
 
